@@ -67,6 +67,7 @@
         "*.{css,scss}": "stylelint --fix"
     },
     "dependencies": {
+        "vexflow": "^3.0.9",
         "wired-elements": "^2.1.2"
     }
 }
