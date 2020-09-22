@@ -1,0 +1,6 @@
+.prettierignore
+.DS_Store
+.editorconfig
+.gitignore
+.stylelintrc
+.stylelintignore
