@@ -1,0 +1,73 @@
+{
+    "name": "guitar-trainer",
+    "version": "1.0.0",
+    "description": "Guitar trainer for learning music world",
+    "main": "index.js",
+    "scripts": {
+        "start": "webpack-dev-server --config=./webpack/webpack.dev.js",
+        "start:mobile": "webpack-dev-server --config=./webpack/webpack.dev.js --host 0.0.0.0",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint \"./**/*.js\"",
+        "lint:style": "stylelint \"./**/*.css\"",
+        "format": "prettier --write \"./**/*.*\"",
+        "build:dev": "webpack --config=./webpack/webpack.dev.js",
+        "build:dist": "webpack --config=./webpack/webpack.prod.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/oliaboria/guitar-trainer.git"
+    },
+    "author": "Olga Boris",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/oliaboria/guitar-trainer/issues"
+    },
+    "homepage": "https://github.com/oliaboria/guitar-trainer#readme",
+    "devDependencies": {
+        "@babel/core": "^7.11.0",
+        "@babel/plugin-proposal-class-properties": "^7.10.4",
+        "@babel/plugin-proposal-private-methods": "^7.10.4",
+        "@babel/plugin-transform-regenerator": "^7.10.4",
+        "@babel/plugin-transform-runtime": "^7.11.0",
+        "@babel/preset-env": "^7.11.0",
+        "babel-eslint": "^11.0.0-beta.00",
+        "babel-loader": "^8.1.0",
+        "clean-webpack-plugin": "^3.0.0",
+        "css-loader": "^4.2.0",
+        "eslint": "^7.6.0",
+        "eslint-config-airbnb-base": "^14.2.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-loader": "^4.0.2",
+        "eslint-plugin-import": "^2.22.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "file-loader": "^6.0.0",
+        "html-webpack-plugin": "^4.3.0",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.11",
+        "mini-css-extract-plugin": "^0.9.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
+        "prettier": "^2.0.5",
+        "style-loader": "^1.2.1",
+        "stylelint": "^13.6.1",
+        "stylelint-config-rational-order": "^0.1.2",
+        "stylelint-config-recommended": "^3.0.0",
+        "terser-webpack-plugin": "^3.0.8",
+        "webpack": "^4.44.1",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0",
+        "webpack-merge": "^5.0.9"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx}": "eslint --fix",
+        "*.{css,scss}": "stylelint --fix"
+    },
+    "dependencies": {
+        "vexflow": "^3.0.9",
+        "wired-elements": "^2.1.2"
+    }
+}
