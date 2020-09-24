@@ -1,5 +1,7 @@
 import { PitchDetector } from 'pitchy';
 
+import detectNote from '../../utils/detectNote';
+
 class MicroBtn extends HTMLElement {
     #root;
     #btnEl;
@@ -50,6 +52,9 @@ class MicroBtn extends HTMLElement {
                             input,
                             sampleRate,
                         );
+
+                        console.log(pitch);
+                        console.log(detectNote(pitch));
                     }, 1000);
                 });
             }
