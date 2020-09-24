@@ -1,8 +1,14 @@
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const NUMBER_OF_NOTES = NOTES.length;
 
-const C0 = 440.0 * 2 ** -4.75;
+// Base note
+const A4_FREQUENCY = 440.0;
+const C0 = A4_FREQUENCY * 2 ** -4.75;
 
+/*
+ *Use this formula to detect a note from frequency
+ * https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
+ */
 const detectNote = (frequency) => {
     if (!frequency) return null;
 
