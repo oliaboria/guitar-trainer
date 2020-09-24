@@ -1,6 +1,7 @@
 import { PitchDetector } from 'pitchy';
 
 import detectNote from '../detectNote';
+import eventEmitter from '../eventEmitter';
 
 class Audio {
     #bufferSize;
@@ -62,7 +63,9 @@ class Audio {
                 );
                 const note = this.#detectNote(pitchConfig);
 
-                console.log(note);
+                if (note) {
+                    eventEmitter.emit('noteDetected', note);
+                }
             });
         });
     }

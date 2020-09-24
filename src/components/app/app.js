@@ -1,4 +1,5 @@
 import { NOTES, OCTAVES } from '../../constants';
+import eventEmitter from '../../utils/eventEmitter';
 import getRandomInt from '../../utils/getRandomInt';
 
 import template from './app.template';
@@ -27,13 +28,20 @@ class App extends HTMLElement {
         this.#note = NOTES[getRandomInt(NOTES.length)];
         this.#octave = OCTAVES[getRandomInt(OCTAVES.length)];
 
-        console.log(this.#note);
         this.render();
+
+        eventEmitter.on('noteDetected', (note) => {
+            this.#isNoteCorrect(note);
+        });
     }
 
     render() {
         this.#musicNoteEl.setAttribute('note', this.#note);
         this.#musicNoteEl.setAttribute('octave', this.#octave);
+    }
+
+    #isNoteCorrect({ key, octave }) {
+        return this.#note === key && this.#octave === octave;
     }
 }
 
