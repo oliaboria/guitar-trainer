@@ -7,11 +7,15 @@ class MusicNote extends HTMLElement {
     #containerEl;
 
     static get observedAttributes() {
-        return ['note'];
+        return ['note', 'octave'];
     }
 
     get #note() {
         return this.getAttribute('note');
+    }
+
+    get #octave() {
+        return this.getAttribute('octave');
     }
 
     constructor() {
@@ -50,12 +54,17 @@ class MusicNote extends HTMLElement {
         // Connect it to the rendering context and draw
         stave.setContext(context).draw();
 
-        const notes = [
-            new VF.StaveNote({ keys: [`${this.#note}/4`], duration: 'w' }),
-        ];
+        const staveNote = new VF.StaveNote({
+            keys: [`${this.#note}/${this.#octave}`],
+            duration: 'w',
+        });
+
+        if (this.#note.includes('#')) {
+            staveNote.addAccidental(0, new VF.Accidental('#'));
+        }
 
         const voice = new VF.Voice({ num_beats: 1, beat_value: 1 });
-        voice.addTickables(notes);
+        voice.addTickables([staveNote]);
 
         const formatter = new VF.Formatter()
             .joinVoices([voice])

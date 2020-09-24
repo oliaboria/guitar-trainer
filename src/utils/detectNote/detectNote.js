@@ -1,4 +1,5 @@
-const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+import { NOTES } from '../../constants';
+
 const NUMBER_OF_NOTES = NOTES.length;
 
 // Base note

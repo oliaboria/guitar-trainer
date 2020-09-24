@@ -3,7 +3,7 @@ import { PitchDetector } from 'pitchy';
 import audio from '../../utils/audio';
 import detectNote from '../../utils/detectNote';
 
-class MicroBtn extends HTMLElement {
+class MicBtn extends HTMLElement {
     #root;
     #btnEl;
     #isEnabled;
@@ -32,4 +32,4 @@ class MicroBtn extends HTMLElement {
     }
 }
 
-export default MicroBtn;
+export default MicBtn;
