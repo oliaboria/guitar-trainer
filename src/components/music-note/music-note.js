@@ -5,9 +5,12 @@ const VF = Vex.Flow;
 class MusicNote extends HTMLElement {
     #root;
     #containerEl;
+    #renderer;
+    #rendererContext;
+    #stave;
 
     static get observedAttributes() {
-        return ['note', 'octave'];
+        return ['note'];
     }
 
     get #note() {
@@ -28,32 +31,37 @@ class MusicNote extends HTMLElement {
 
         this.#root.appendChild(this.#containerEl);
 
+        this.#renderer = new VF.Renderer(
+            this.#containerEl,
+            VF.Renderer.Backends.SVG,
+        );
+        this.#renderer.resize(300, 300);
+
+        this.#rendererContext = this.#renderer.getContext();
+        this.#rendererContext
+            .setFont('Arial', 10, '')
+            .setBackgroundFillStyle('#eed');
+
+        // Create a this.#stave of width 100 at position 10, 40 on the canvas
+        this.#stave = new VF.Stave(10, 40, 100);
+
+        // Add a clef
+        this.#stave.addClef('treble');
+
+        // Connect it to the rendering context and draw
+        this.#stave.setContext(this.#rendererContext).draw();
+
         this.render();
     }
 
     attributeChangedCallback() {
+        this.#rendererContext.clear();
+        this.#stave.draw();
+
         this.render();
     }
 
     render() {
-        const renderer = new VF.Renderer(
-            this.#containerEl,
-            VF.Renderer.Backends.SVG,
-        );
-        renderer.resize(300, 300);
-
-        const context = renderer.getContext();
-        context.setFont('Arial', 10, '').setBackgroundFillStyle('#eed');
-
-        // Create a stave of width 100 at position 10, 40 on the canvas
-        const stave = new VF.Stave(10, 40, 100);
-
-        // Add a clef
-        stave.addClef('treble');
-
-        // Connect it to the rendering context and draw
-        stave.setContext(context).draw();
-
         const staveNote = new VF.StaveNote({
             keys: [`${this.#note}/${this.#octave}`],
             duration: 'w',
@@ -70,7 +78,7 @@ class MusicNote extends HTMLElement {
             .joinVoices([voice])
             .format([voice], 100);
 
-        voice.draw(context, stave);
+        voice.draw(this.#rendererContext, this.#stave);
     }
 }
 

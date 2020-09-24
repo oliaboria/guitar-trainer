@@ -25,13 +25,17 @@ class App extends HTMLElement {
         this.#messageEl = this.#root.querySelector('message');
         this.#nextNoteBtn = this.#root.querySelector('.next-note-btn');
 
-        this.#note = NOTES[getRandomInt(NOTES.length)];
-        this.#octave = OCTAVES[getRandomInt(OCTAVES.length)];
+        this.#generateRandomNote();
 
         this.render();
 
         eventEmitter.on('noteDetected', (note) => {
             this.#isNoteCorrect(note);
+        });
+
+        this.#nextNoteBtn.addEventListener('click', () => {
+            this.#generateRandomNote();
+            this.render();
         });
     }
 
@@ -42,6 +46,11 @@ class App extends HTMLElement {
 
     #isNoteCorrect({ key, octave }) {
         return this.#note === key && this.#octave === octave;
+    }
+
+    #generateRandomNote() {
+        this.#note = NOTES[getRandomInt(NOTES.length)];
+        this.#octave = OCTAVES[getRandomInt(OCTAVES.length)];
     }
 }
 
