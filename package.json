@@ -67,6 +67,7 @@
         "*.{css,scss}": "stylelint --fix"
     },
     "dependencies": {
+        "pitchy": "^2.0.2",
         "vexflow": "^3.0.9",
         "wired-elements": "^2.1.2"
     }
