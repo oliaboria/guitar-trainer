@@ -55,13 +55,15 @@ class MusicNote extends HTMLElement {
     }
 
     attributeChangedCallback() {
-        this.#rendererContext.clear();
-        this.#stave.draw();
-
         this.render();
     }
 
     render() {
+        if (this.#rendererContext) {
+            this.#rendererContext.clear();
+            this.#stave.draw();
+        }
+
         const staveNote = new VF.StaveNote({
             keys: [`${this.#note}/${this.#octave}`],
             duration: 'w',

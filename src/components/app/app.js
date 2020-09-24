@@ -22,7 +22,7 @@ class App extends HTMLElement {
         this.#root.appendChild(template.content.cloneNode(true));
 
         this.#musicNoteEl = this.#root.querySelector('music-note');
-        this.#messageEl = this.#root.querySelector('message');
+        this.#messageEl = this.#root.querySelector('result-message');
         this.#nextNoteBtn = this.#root.querySelector('.next-note-btn');
 
         this.#generateRandomNote();
@@ -30,7 +30,12 @@ class App extends HTMLElement {
         this.render();
 
         eventEmitter.on('noteDetected', (note) => {
-            this.#isNoteCorrect(note);
+            console.log('note', note);
+            const isCorrect = this.#isNoteCorrect(note);
+            this.#messageEl.setAttribute(
+                'info',
+                JSON.stringify({ isCorrect, ...note }),
+            );
         });
 
         this.#nextNoteBtn.addEventListener('click', () => {
