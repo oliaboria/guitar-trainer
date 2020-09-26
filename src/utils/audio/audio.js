@@ -15,6 +15,8 @@ class Audio {
         this.#bufferSize = 2048;
         this.#isInitialized = false;
         this.#userMedia = navigator.mediaDevices.getUserMedia({ audio: true });
+
+        this.audioProcessHandler = this.audioProcessHandler.bind(this);
     }
 
     #findPitch(input) {
@@ -44,6 +46,11 @@ class Audio {
             1,
         );
 
+        this.#scriptProcessor.addEventListener(
+            'audioprocess',
+            this.audioProcessHandler,
+        );
+
         this.#isInitialized = true;
     }
 
@@ -59,21 +66,22 @@ class Audio {
             sourceNode.connect(this.#analyserNode);
             this.#analyserNode.connect(this.#scriptProcessor);
             this.#scriptProcessor.connect(this.#audioContext.destination);
-            this.#scriptProcessor.addEventListener('audioprocess', (event) => {
-                const pitchConfig = this.#findPitch(
-                    event.inputBuffer.getChannelData(0),
-                );
-                const note = this.#detectNote(pitchConfig);
-
-                if (note) {
-                    eventEmitter.emit('noteDetected', note);
-                }
-            });
         });
     }
 
     stopRecordingAudio() {
         this.#audioContext.suspend();
+    }
+
+    audioProcessHandler(event) {
+        const pitchConfig = this.#findPitch(
+            event.inputBuffer.getChannelData(0),
+        );
+        const note = this.#detectNote(pitchConfig);
+
+        if (note) {
+            eventEmitter.emit('noteDetected', note);
+        }
     }
 }
 
