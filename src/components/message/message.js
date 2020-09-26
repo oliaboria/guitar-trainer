@@ -29,6 +29,8 @@ class Message extends HTMLElement {
     render() {
         const { key, octave, isCorrect } = this.#info;
 
+        if (!key && !octave) return;
+
         this.#containerEl.innerText = `${key}${octave}: ${isCorrect}`;
     }
 }

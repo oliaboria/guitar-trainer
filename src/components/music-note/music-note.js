@@ -14,11 +14,7 @@ class MusicNote extends HTMLElement {
     }
 
     get #note() {
-        return this.getAttribute('note');
-    }
-
-    get #octave() {
-        return this.getAttribute('octave');
+        return JSON.parse(this.getAttribute('note'));
     }
 
     constructor() {
@@ -64,12 +60,14 @@ class MusicNote extends HTMLElement {
             this.#stave.draw();
         }
 
+        const { key, octave } = this.#note;
+
         const staveNote = new VF.StaveNote({
-            keys: [`${this.#note}/${this.#octave}`],
+            keys: [`${key}/${octave}`],
             duration: 'w',
         });
 
-        if (this.#note.includes('#')) {
+        if (key.includes('#')) {
             staveNote.addAccidental(0, new VF.Accidental('#'));
         }
 

@@ -45,8 +45,8 @@ class App extends HTMLElement {
     }
 
     render() {
-        this.#musicNoteEl.setAttribute('note', this.#note);
-        this.#musicNoteEl.setAttribute('octave', this.#octave);
+        const note = JSON.stringify({ key: this.#note, octave: this.#octave });
+        this.#musicNoteEl.setAttribute('note', note);
     }
 
     #isNoteCorrect({ key, octave }) {
