@@ -18,7 +18,7 @@ The app is available on `http://localhost:3000/`
 
 ## Usage
 
-This app supports 2 modes: piano and guitar (since guiar has one octave offset in musical part).
+This app supports 2 modes: piano and guitar (since guitar has one octave offset in musical part).
 The default is piano.
 
 In order to run guitar mode, use `mode` query parameter:
