@@ -5,13 +5,16 @@ const VF = Vex.Flow;
 class MusicNote extends HTMLElement {
     #root;
     #containerEl;
+    #renderer;
+    #rendererContext;
+    #stave;
 
     static get observedAttributes() {
         return ['note'];
     }
 
     get #note() {
-        return this.getAttribute('note');
+        return JSON.parse(this.getAttribute('note'));
     }
 
     constructor() {
@@ -24,6 +27,26 @@ class MusicNote extends HTMLElement {
 
         this.#root.appendChild(this.#containerEl);
 
+        this.#renderer = new VF.Renderer(
+            this.#containerEl,
+            VF.Renderer.Backends.SVG,
+        );
+        this.#renderer.resize(300, 300);
+
+        this.#rendererContext = this.#renderer.getContext();
+        this.#rendererContext
+            .setFont('Arial', 10, '')
+            .setBackgroundFillStyle('#eed');
+
+        // Create a this.#stave of width 100 at position 10, 40 on the canvas
+        this.#stave = new VF.Stave(10, 40, 100);
+
+        // Add a clef
+        this.#stave.addClef('treble');
+
+        // Connect it to the rendering context and draw
+        this.#stave.setContext(this.#rendererContext).draw();
+
         this.render();
     }
 
@@ -32,36 +55,30 @@ class MusicNote extends HTMLElement {
     }
 
     render() {
-        const renderer = new VF.Renderer(
-            this.#containerEl,
-            VF.Renderer.Backends.SVG,
-        );
-        renderer.resize(300, 300);
+        if (this.#rendererContext) {
+            this.#rendererContext.clear();
+            this.#stave.draw();
+        }
 
-        const context = renderer.getContext();
-        context.setFont('Arial', 10, '').setBackgroundFillStyle('#eed');
+        const { key, octave } = this.#note;
 
-        // Create a stave of width 100 at position 10, 40 on the canvas
-        const stave = new VF.Stave(10, 40, 100);
+        const staveNote = new VF.StaveNote({
+            keys: [`${key}/${octave}`],
+            duration: 'w',
+        });
 
-        // Add a clef
-        stave.addClef('treble');
-
-        // Connect it to the rendering context and draw
-        stave.setContext(context).draw();
-
-        const notes = [
-            new VF.StaveNote({ keys: [`${this.#note}/4`], duration: 'w' }),
-        ];
+        if (key.includes('#')) {
+            staveNote.addAccidental(0, new VF.Accidental('#'));
+        }
 
         const voice = new VF.Voice({ num_beats: 1, beat_value: 1 });
-        voice.addTickables(notes);
+        voice.addTickables([staveNote]);
 
         const formatter = new VF.Formatter()
             .joinVoices([voice])
             .format([voice], 100);
 
-        voice.draw(context, stave);
+        voice.draw(this.#rendererContext, this.#stave);
     }
 }
 
