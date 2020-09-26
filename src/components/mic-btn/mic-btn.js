@@ -29,6 +29,7 @@ class MicBtn extends HTMLElement {
 
     toogleMicHandler() {
         let icon;
+
         if (this.#isEnabled) {
             audio.stopRecordingAudio();
             this.#isEnabled = false;
