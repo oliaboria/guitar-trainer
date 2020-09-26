@@ -69,6 +69,7 @@
     "dependencies": {
         "@material/mwc-icon": "^0.18.0",
         "pitchy": "^2.0.2",
+        "query-string": "^6.13.2",
         "vexflow": "^3.0.9",
         "wired-elements": "^2.1.2"
     }

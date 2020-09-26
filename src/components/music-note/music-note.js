@@ -19,6 +19,10 @@ class MusicNote extends HTMLElement {
         return JSON.parse(this.getAttribute('note'));
     }
 
+    get #shift() {
+        return +this.getAttribute('shift');
+    }
+
     constructor() {
         super();
         this.#root = this.attachShadow({ mode: 'open' });
@@ -64,7 +68,7 @@ class MusicNote extends HTMLElement {
         const { key, octave } = this.#note;
 
         const staveNote = new VF.StaveNote({
-            keys: [`${key}/${octave}`],
+            keys: [`${key}/${octave + this.#shift}`],
             duration: 'w',
         });
 

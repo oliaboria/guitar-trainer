@@ -2,6 +2,7 @@ import { PitchDetector } from 'pitchy';
 
 import detectNote from '../detectNote';
 import eventEmitter from '../eventEmitter';
+import logger from '../logger';
 
 class Audio {
     #bufferSize;
@@ -15,6 +16,8 @@ class Audio {
         this.#bufferSize = 2048;
         this.#isInitialized = false;
         this.#userMedia = navigator.mediaDevices.getUserMedia({ audio: true });
+
+        this.audioProcessHandler = this.audioProcessHandler.bind(this);
     }
 
     #findPitch(input) {
@@ -44,34 +47,46 @@ class Audio {
             1,
         );
 
+        this.#scriptProcessor.addEventListener(
+            'audioprocess',
+            this.audioProcessHandler,
+        );
+
         this.#isInitialized = true;
     }
 
     startRecordingAudio() {
         if (!this.#isInitialized) this.#initialize();
 
-        this.#userMedia.then((stream) => {
-            const sourceNode = this.#audioContext.createMediaStreamSource(
-                stream,
-            );
-            sourceNode.connect(this.#analyserNode);
-            this.#analyserNode.connect(this.#scriptProcessor);
-            this.#scriptProcessor.connect(this.#audioContext.destination);
-            this.#scriptProcessor.addEventListener('audioprocess', (event) => {
-                const pitchConfig = this.#findPitch(
-                    event.inputBuffer.getChannelData(0),
-                );
-                const note = this.#detectNote(pitchConfig);
+        this.#userMedia
+            .then((stream) => {
+                this.#audioContext.resume();
 
-                if (note) {
-                    eventEmitter.emit('noteDetected', note);
-                }
+                const sourceNode = this.#audioContext.createMediaStreamSource(
+                    stream,
+                );
+                sourceNode.connect(this.#analyserNode);
+                this.#analyserNode.connect(this.#scriptProcessor);
+                this.#scriptProcessor.connect(this.#audioContext.destination);
+            })
+            .catch((err) => {
+                logger.error(err);
             });
-        });
     }
 
     stopRecordingAudio() {
-        this.#audioContext.close();
+        this.#audioContext.suspend();
+    }
+
+    audioProcessHandler(event) {
+        const pitchConfig = this.#findPitch(
+            event.inputBuffer.getChannelData(0),
+        );
+        const note = this.#detectNote(pitchConfig);
+
+        if (note) {
+            eventEmitter.emit('noteDetected', note);
+        }
     }
 }
 
