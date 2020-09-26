@@ -16,6 +16,18 @@ class App extends HTMLElement {
     constructor() {
         super();
         this.#root = this.attachShadow({ mode: 'open' });
+
+        this.nextButtonClickHandler = this.nextButtonClickHandler.bind(this);
+        this.noteDetectedHandler = this.noteDetectedHandler.bind(this);
+    }
+
+    #isNoteCorrect({ key, octave }) {
+        return this.#note === key && this.#octave === octave;
+    }
+
+    #generateRandomNote() {
+        this.#note = NOTES[getRandomInt(NOTES.length)];
+        this.#octave = OCTAVES[getRandomInt(OCTAVES.length)];
     }
 
     connectedCallback() {
@@ -29,33 +41,37 @@ class App extends HTMLElement {
 
         this.render();
 
-        eventEmitter.on('noteDetected', (note) => {
-            const isCorrect = this.#isNoteCorrect(note);
-            this.#messageEl.setAttribute(
-                'info',
-                JSON.stringify({ isCorrect, ...note }),
-            );
-        });
+        eventEmitter.on('noteDetected', this.noteDetectedHandler);
 
-        this.#nextNoteBtn.addEventListener('click', () => {
-            this.#generateRandomNote();
-            this.#messageEl.setAttribute('info', JSON.stringify({}));
-            this.render();
-        });
+        this.#nextNoteBtn.addEventListener(
+            'click',
+            this.nextButtonClickHandler,
+        );
+    }
+
+    disconnectedCallback() {
+        eventEmitter.removeListener('noteDetected', this.noteDetectedHandler);
     }
 
     render() {
         const note = JSON.stringify({ key: this.#note, octave: this.#octave });
+
         this.#musicNoteEl.setAttribute('note', note);
     }
 
-    #isNoteCorrect({ key, octave }) {
-        return this.#note === key && this.#octave === octave;
+    nextButtonClickHandler() {
+        this.#generateRandomNote();
+        this.#messageEl.setAttribute('info', JSON.stringify({}));
+        this.render();
     }
 
-    #generateRandomNote() {
-        this.#note = NOTES[getRandomInt(NOTES.length)];
-        this.#octave = OCTAVES[getRandomInt(OCTAVES.length)];
+    noteDetectedHandler(note) {
+        const isCorrect = this.#isNoteCorrect(note);
+
+        this.#messageEl.setAttribute(
+            'info',
+            JSON.stringify({ isCorrect, ...note }),
+        );
     }
 }
 
