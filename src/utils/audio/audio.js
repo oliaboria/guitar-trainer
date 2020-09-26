@@ -2,6 +2,7 @@ import { PitchDetector } from 'pitchy';
 
 import detectNote from '../detectNote';
 import eventEmitter from '../eventEmitter';
+import logger from '../logger';
 
 class Audio {
     #bufferSize;
@@ -57,16 +58,20 @@ class Audio {
     startRecordingAudio() {
         if (!this.#isInitialized) this.#initialize();
 
-        this.#userMedia.then((stream) => {
-            this.#audioContext.resume();
+        this.#userMedia
+            .then((stream) => {
+                this.#audioContext.resume();
 
-            const sourceNode = this.#audioContext.createMediaStreamSource(
-                stream,
-            );
-            sourceNode.connect(this.#analyserNode);
-            this.#analyserNode.connect(this.#scriptProcessor);
-            this.#scriptProcessor.connect(this.#audioContext.destination);
-        });
+                const sourceNode = this.#audioContext.createMediaStreamSource(
+                    stream,
+                );
+                sourceNode.connect(this.#analyserNode);
+                this.#analyserNode.connect(this.#scriptProcessor);
+                this.#scriptProcessor.connect(this.#audioContext.destination);
+            })
+            .catch((err) => {
+                logger.error(err);
+            });
     }
 
     stopRecordingAudio() {
