@@ -2,9 +2,19 @@ const template = document.createElement('template');
 
 template.innerHTML = `
     <style>
-        .btn-container {
-            width: 400px;
+
+        .container {
+            width: 100%;
             margin: 0 auto;
+        }
+
+        @media (min-width: 500px) {
+            .container {
+                max-width: 400px;
+            }
+        }
+
+        .btn-container {
             margin-bottom: 30px;
         }
 
@@ -14,14 +24,16 @@ template.innerHTML = `
             align-items: center;
         }
     </style>
-    <music-note></music-note>
-    <div class="btn-container">
-        <div class="btn-wrapper">
-            <mic-btn></mic-btn>
-            <wired-button elevation="2" class="next-note-btn">Next note</wired-button>
+    <div class="container">
+        <music-note></music-note>
+        <div class="btn-container">
+            <div class="btn-wrapper">
+                <mic-btn></mic-btn>
+                <wired-button elevation="2" class="next-note-btn">Next note</wired-button>
+            </div>
         </div>
+        <result-message></result-message>
     </div>
-    <result-message></result-message>
 `;
 
 export default template;

@@ -3,8 +3,8 @@ const template = document.createElement('template');
 template.innerHTML = `
     <style>
         wired-card {
-            margin: 30px auto;
-            width: 400px;
+            margin-top: 30px;
+            margin-bottom: 30px;
             display: block;
         }
 
