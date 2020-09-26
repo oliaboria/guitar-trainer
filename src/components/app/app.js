@@ -38,7 +38,7 @@ class App extends HTMLElement {
     #detectInstrument() {
         const { mode } = parse(window.location.search);
 
-        this.#mode = MODES[mode] || 0;
+        this.#mode = MODES[mode?.toLowerCase()] || 0;
     }
 
     connectedCallback() {
