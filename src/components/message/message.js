@@ -1,6 +1,12 @@
+import template from './message.template';
+
+const CORRECT_COLOR = 'LightGreen';
+const INCORRECT_COLOR = 'LightCoral';
+
 class Message extends HTMLElement {
     #root;
     #containerEl;
+    #contentEl;
 
     static get observedAttributes() {
         return ['info'];
@@ -16,8 +22,10 @@ class Message extends HTMLElement {
     }
 
     connectedCallback() {
-        this.#containerEl = document.createElement('div');
-        this.#root.appendChild(this.#containerEl);
+        this.#root.appendChild(template.content.cloneNode(true));
+
+        this.#containerEl = this.#root.querySelector('wired-card');
+        this.#contentEl = this.#root.querySelector('.content');
 
         this.render();
     }
@@ -28,10 +36,17 @@ class Message extends HTMLElement {
 
     render() {
         const { key, octave, isCorrect } = this.#info;
+        const color = isCorrect ? CORRECT_COLOR : INCORRECT_COLOR;
 
-        if (!key && !octave) return;
+        // if (!key && !octave) {
+        //     this.#containerEl.classList.add('hidden');
+        // } else {
+        //     this.#containerEl.classList.remove('hidden');
+        // }
 
-        this.#containerEl.innerText = `${key}${octave}: ${isCorrect}`;
+        this.#containerEl.classList.toggle('hidden', !key && !octave);
+        this.#contentEl.innerText = `${key}${octave}`;
+        this.#containerEl.setAttribute('fill', color);
     }
 }
 

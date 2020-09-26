@@ -30,7 +30,6 @@ class App extends HTMLElement {
         this.render();
 
         eventEmitter.on('noteDetected', (note) => {
-            console.log('note', note);
             const isCorrect = this.#isNoteCorrect(note);
             this.#messageEl.setAttribute(
                 'info',
@@ -40,6 +39,7 @@ class App extends HTMLElement {
 
         this.#nextNoteBtn.addEventListener('click', () => {
             this.#generateRandomNote();
+            this.#messageEl.setAttribute('info', JSON.stringify({}));
             this.render();
         });
     }

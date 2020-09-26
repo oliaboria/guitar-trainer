@@ -1,5 +1,7 @@
 import Vex from 'vexflow';
 
+import template from './music-note.template';
+
 const VF = Vex.Flow;
 
 class MusicNote extends HTMLElement {
@@ -23,15 +25,14 @@ class MusicNote extends HTMLElement {
     }
 
     connectedCallback() {
-        this.#containerEl = document.createElement('div');
-
-        this.#root.appendChild(this.#containerEl);
+        this.#root.appendChild(template.content.cloneNode(true));
+        this.#containerEl = this.#root.querySelector('.note-wrapper');
 
         this.#renderer = new VF.Renderer(
             this.#containerEl,
             VF.Renderer.Backends.SVG,
         );
-        this.#renderer.resize(300, 300);
+        this.#renderer.resize(150, 210);
 
         this.#rendererContext = this.#renderer.getContext();
         this.#rendererContext
