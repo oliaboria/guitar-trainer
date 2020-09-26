@@ -1,4 +1,6 @@
-import { NOTES, OCTAVES } from '../../constants';
+import { parse } from 'query-string';
+
+import { NOTES, OCTAVES, MODES } from '../../constants';
 import eventEmitter from '../../utils/eventEmitter';
 import getRandomInt from '../../utils/getRandomInt';
 
@@ -12,6 +14,7 @@ class App extends HTMLElement {
 
     #note;
     #octave;
+    #mode;
 
     constructor() {
         super();
@@ -19,6 +22,8 @@ class App extends HTMLElement {
 
         this.nextButtonClickHandler = this.nextButtonClickHandler.bind(this);
         this.noteDetectedHandler = this.noteDetectedHandler.bind(this);
+
+        this.#detectInstrument();
     }
 
     #isNoteCorrect({ key, octave }) {
@@ -30,6 +35,12 @@ class App extends HTMLElement {
         this.#octave = OCTAVES[getRandomInt(OCTAVES.length)];
     }
 
+    #detectInstrument() {
+        const { mode } = parse(window.location.search);
+
+        this.#mode = MODES[mode] || 0;
+    }
+
     connectedCallback() {
         this.#root.appendChild(template.content.cloneNode(true));
 
@@ -37,6 +48,7 @@ class App extends HTMLElement {
         this.#messageEl = this.#root.querySelector('result-message');
         this.#nextNoteBtn = this.#root.querySelector('.next-note-btn');
 
+        this.#musicNoteEl.setAttribute('shift', this.#mode);
         this.#generateRandomNote();
 
         this.render();
