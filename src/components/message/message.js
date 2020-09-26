@@ -26,6 +26,8 @@ class Message extends HTMLElement {
 
         this.#containerEl = this.#root.querySelector('wired-card');
         this.#contentEl = this.#root.querySelector('.content');
+
+        this.render();
     }
 
     attributeChangedCallback() {
@@ -36,8 +38,13 @@ class Message extends HTMLElement {
         const { key, octave, isCorrect } = this.#info;
         const color = isCorrect ? CORRECT_COLOR : INCORRECT_COLOR;
 
-        if (!key && !octave) return;
+        // if (!key && !octave) {
+        //     this.#containerEl.classList.add('hidden');
+        // } else {
+        //     this.#containerEl.classList.remove('hidden');
+        // }
 
+        this.#containerEl.classList.toggle('hidden', !key && !octave);
         this.#contentEl.innerText = `${key}${octave}`;
         this.#containerEl.setAttribute('fill', color);
     }

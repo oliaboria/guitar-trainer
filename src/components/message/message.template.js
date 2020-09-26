@@ -11,12 +11,14 @@ template.innerHTML = `
         .content {
             text-align: center;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
-    <div>
-        <wired-card>
-            <div class="content"></div>
-        </wired-card>
-    </div>
+    <wired-card>
+        <div class="content"></div>
+    </wired-card>
 `;
 
 export default template;

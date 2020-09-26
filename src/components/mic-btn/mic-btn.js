@@ -16,7 +16,7 @@ class MicBtn extends HTMLElement {
         this.#root = this.attachShadow({ mode: 'open' });
         this.#isEnabled = false;
 
-        this.toogleMicHandler = this.toogleMicHandler.bind(this);
+        this.toggleMicHandler = this.toggleMicHandler.bind(this);
     }
 
     connectedCallback() {
@@ -24,10 +24,10 @@ class MicBtn extends HTMLElement {
         this.#btnEl = this.#root.querySelector('wired-icon-button');
         this.#micIconEl = this.#root.querySelector('mwc-icon');
 
-        this.#btnEl.addEventListener('click', this.toogleMicHandler);
+        this.#btnEl.addEventListener('click', this.toggleMicHandler);
     }
 
-    toogleMicHandler() {
+    toggleMicHandler() {
         let icon;
 
         if (this.#isEnabled) {
