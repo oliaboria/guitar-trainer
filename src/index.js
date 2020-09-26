@@ -1,4 +1,5 @@
 import 'wired-elements/lib/wired-elements-iife';
+import '@material/mwc-icon';
 
 import App from './components/app';
 import Message from './components/message';

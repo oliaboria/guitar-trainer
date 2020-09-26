@@ -3,32 +3,44 @@ import { PitchDetector } from 'pitchy';
 import audio from '../../utils/audio';
 import detectNote from '../../utils/detectNote';
 
+import template from './mic-btn.template';
+
 class MicBtn extends HTMLElement {
     #root;
     #btnEl;
+    #micIconEl;
     #isEnabled;
 
     constructor() {
         super();
         this.#root = this.attachShadow({ mode: 'open' });
         this.#isEnabled = false;
+
+        this.toogleMicHandler = this.toogleMicHandler.bind(this);
     }
 
     connectedCallback() {
-        this.#btnEl = document.createElement('button');
-        this.#btnEl.innerText = 'Microphone';
+        this.#root.appendChild(template.content.cloneNode(true));
+        this.#btnEl = this.#root.querySelector('wired-icon-button');
+        this.#micIconEl = this.#root.querySelector('mwc-icon');
 
-        this.#root.appendChild(this.#btnEl);
+        this.#btnEl.addEventListener('click', this.toogleMicHandler);
+    }
 
-        this.#btnEl.addEventListener('click', () => {
-            if (this.#isEnabled) {
-                audio.stopRecordingAudio();
-                this.#isEnabled = false;
-            } else {
-                audio.startRecordingAudio();
-                this.#isEnabled = true;
-            }
-        });
+    toogleMicHandler() {
+        let icon;
+        if (this.#isEnabled) {
+            audio.stopRecordingAudio();
+            this.#isEnabled = false;
+            icon = 'mic_off';
+        } else {
+            audio.startRecordingAudio();
+            this.#isEnabled = true;
+            icon = 'mic';
+        }
+
+        this.#btnEl.classList.toggle('red');
+        this.#micIconEl.innerText = icon;
     }
 }
 

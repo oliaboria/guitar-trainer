@@ -3,7 +3,7 @@ const template = document.createElement('template');
 template.innerHTML = `
     <style>
         wired-card {
-            margin: 0 auto;
+            margin: 30px auto;
             width: 400px;
             display: block;
         }
