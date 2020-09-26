@@ -51,6 +51,8 @@ class Audio {
         if (!this.#isInitialized) this.#initialize();
 
         this.#userMedia.then((stream) => {
+            this.#audioContext.resume();
+
             const sourceNode = this.#audioContext.createMediaStreamSource(
                 stream,
             );
@@ -71,7 +73,7 @@ class Audio {
     }
 
     stopRecordingAudio() {
-        this.#audioContext.close();
+        this.#audioContext.suspend();
     }
 }
 
