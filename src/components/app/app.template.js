@@ -5,6 +5,7 @@ template.innerHTML = `
         .btn-container {
             width: 400px;
             margin: 0 auto;
+            margin-bottom: 30px;
         }
 
         .btn-wrapper {
